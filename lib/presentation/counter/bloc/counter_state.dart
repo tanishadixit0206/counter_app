@@ -14,4 +14,3 @@ class CounterInitial extends CounterState {
   List<Object?> get props => [error];
 }
 
-class Loading extends CounterState{}
