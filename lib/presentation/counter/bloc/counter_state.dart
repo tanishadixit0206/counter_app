@@ -1,16 +1,22 @@
 part of 'counter_bloc.dart';
 
-abstract class CounterState extends Equatable {
-  const CounterState();
-
-  @override
-  List<Object?> get props => [];
-}
+abstract class CounterState {}
 
 class CounterInitial extends CounterState {
-  const CounterInitial({this.error});
-  final String? error;
-  @override
-  List<Object?> get props => [error];
+  final int count;
+
+  CounterInitial(this.count);
+}
+
+class CounterUpdated extends CounterState {
+  final int count;
+
+  CounterUpdated(this.count);
+}
+
+class CounterError extends CounterState {
+  final String message;
+
+  CounterError(this.message);
 }
 
