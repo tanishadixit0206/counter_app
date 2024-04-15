@@ -1,3 +1,4 @@
+import 'package:counter_app/presentation/converter/converter_screen.dart';
 import 'package:counter_app/presentation/counter/counter_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -12,8 +13,13 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-    home: CounterScreen(),
+      home: CounterScreen(),
+      routes: <String, WidgetBuilder>{
+        '/counter': (BuildContext context) => CounterScreen(),
+        '/converter': (BuildContext context) => ConverterScreen(),
+      },
     );
   }
 }
+
 
