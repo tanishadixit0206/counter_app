@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 part 'bottom_navbar_event.dart';
 part 'bottom_navbar_state.dart';
 
-class BottomNavbarBloc extends Bloc<BottomNavbarEvent, BottomNavbarState> {
-  BottomNavbarBloc() : super(const BottomNavbarCurrentState(index: 0)) {
+class BottomNavbarBloc extends Bloc<BottomNavbarEvent, BottomNavbarState> { 
+
+  BottomNavbarBloc() : super(BottomNavbarCurrentState(0)) {
     on<BottomNavbarEvent>((event, emit) {
       if (event is TabChange) {
         _onTabChange(event.index);
@@ -14,7 +15,7 @@ class BottomNavbarBloc extends Bloc<BottomNavbarEvent, BottomNavbarState> {
   }
 
   void _onTabChange(int index) {
-    emit(BottomNavbarCurrentState(index: index));
+    emit(BottomNavbarCurrentState(index));
     // navigateTo(index);
   }
 
