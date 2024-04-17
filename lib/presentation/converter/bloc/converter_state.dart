@@ -1,12 +1,15 @@
 part of 'converter_bloc.dart';
 
-abstract class ConverterState {}
-
-class ConverterInitial extends ConverterState{}
-
-class ConverterError extends ConverterState {
-  final String message;
-
-  ConverterError(this.message);
+abstract class ConverterState {
+  String binary;
+  String decimal;
+  ConverterState(this.binary, this.decimal);
 }
 
+class BinaryToDecimalState extends ConverterState {
+  BinaryToDecimalState(super.binary, super.decimal);
+}
+
+class DecimalToBinaryState extends ConverterState {
+  DecimalToBinaryState(super.binary, super.decimal);
+}
