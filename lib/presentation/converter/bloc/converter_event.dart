@@ -2,6 +2,11 @@ part of 'converter_bloc.dart';
 
 abstract class ConverterEvent {}
 
-class BinaryToDecimalEvent extends ConverterEvent{}
+class ConvertEvent extends ConverterEvent {
+  final String input;
+  ConvertEvent(this.input);
+}
 
-class DecimalToBinaryEvent extends ConverterEvent{}
+class SwapConversionEvent extends ConverterEvent {}
+
+class ResetConversionEvent extends ConverterEvent {}
