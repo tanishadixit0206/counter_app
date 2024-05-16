@@ -1,7 +1,7 @@
 part of 'counter_bloc.dart';
 
-abstract class CounterState {
-  int count;
+class CounterState {
+  final int count;
   CounterState(this.count);
 }
 
@@ -11,9 +11,7 @@ abstract class CounterState {
 //   CounterInitial(this.count);
 // }
 
-class CounterUpdated extends CounterState {
-  CounterUpdated(super.count);
-}
+
 
 // class CounterError extends CounterState {
 //   final String message;
