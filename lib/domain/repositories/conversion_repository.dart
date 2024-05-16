@@ -1,11 +1,20 @@
 import 'package:counter_app/data/services/remote/api_service.dart';
 
-Future<String> binaryToDecimal(String binary) async {
-  String decimal = await BinaryToDecimal(binary);
-  return decimal;
-}
+class ConversionRepository {
+  final ApiService apiService;
+  ConversionRepository(this.apiService);
 
-Future<String> decimalToBinary(String decimal) async {
-  String binary = await BinaryToDecimal(decimal);
-  return binary;
+  Future<String> binaryToDecimal(String binary) async {
+    print("in repository before call");
+    String decimal = await apiService.BinaryToDecimal(binary);
+    print("in repository after call");
+    return decimal;
+  }
+
+  Future<String> decimalToBinary(String decimal) async {
+    print("in repository before call");
+    String binary = await apiService.DecimalToBinary(decimal);
+    print("in repository after call");
+    return binary;
+  }
 }
