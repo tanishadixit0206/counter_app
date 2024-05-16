@@ -1,3 +1,5 @@
+import 'package:counter_app/data/services/remote/api_service.dart';
+import 'package:counter_app/domain/repositories/conversion_repository.dart';
 import 'package:counter_app/presentation/bottom_navbar/bottom_navbar_screen.dart';
 import 'package:counter_app/presentation/converter/bloc/converter_bloc.dart';
 import 'package:flutter/material.dart';
@@ -5,16 +7,33 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ConverterScreen extends StatelessWidget {
   ConverterScreen({Key? key}) : super(key: key);
-  TextEditingController decimalcontroller = TextEditingController();
-  TextEditingController binarycontroller = TextEditingController();
-
+  TextEditingController inputcontroller = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    ApiService apiService = ApiService();
+    ConversionRepository conversionRepository =
+        ConversionRepository(apiService);
     return BlocProvider(
-      create: (context) => ConverterBloc(),
+      create: (context) => ConverterBloc(conversionRepository),
       child: BlocConsumer<ConverterBloc, ConverterState>(
         listener: (context, state) {},
         builder: (context, state) {
+          String text1;
+          String text2;
+          String output;
+          if (state is BinaryToDecimalState) {
+            text1 = BinaryToDecimalState.text1;
+            text2 = BinaryToDecimalState.text2;
+            output = state.decimal;
+          } else if (state is DecimalToBinaryState) {
+            text1 = DecimalToBinaryState.text1;
+            text2 = DecimalToBinaryState.text2;
+            output = state.binary;
+          } else {
+            text1 = "";
+            text2 = "";
+            output = "";
+          }
           return Scaffold(
             body: Column(
               children: [
@@ -38,16 +57,72 @@ class ConverterScreen extends StatelessWidget {
                         Padding(
                           padding: EdgeInsets.all(16.0),
                           child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Column(
+                                children: [
+                                  Text("From"),
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      border: Border.all(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary,
+                                          style: BorderStyle.solid),
+                                      borderRadius: BorderRadius.circular(8.0),
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        Padding(
+                                          padding: EdgeInsets.all(16.0),
+                                          child: Text(text1),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Column(
+                                children: [
+                                  Text("To"),
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      border: Border.all(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary,
+                                          style: BorderStyle.solid),
+                                      borderRadius: BorderRadius.circular(10.0),
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        Padding(
+                                          padding: EdgeInsets.all(16.0),
+                                          child: Text(text2),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.all(16.0),
+                          child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Expanded(
                                 child: TextField(
-                                  controller: decimalcontroller,
+                                  controller: inputcontroller,
                                   style: TextStyle(
                                     fontSize: 16.0,
                                   ),
                                   decoration: InputDecoration(
-                                    labelText: "Decimal",
+                                    labelText: "Input Number",
                                     labelStyle: TextStyle(
                                       fontSize: 16.0,
                                       color: Colors.grey,
@@ -75,59 +150,63 @@ class ConverterScreen extends StatelessWidget {
                         ),
                         Padding(
                           padding: EdgeInsets.all(16.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Expanded(
-                                child: TextField(
-                                  controller: binarycontroller,
-                                  style: TextStyle(
-                                    fontSize: 16.0,
-                                  ),
-                                  decoration: InputDecoration(
-                                    labelText: "Binary",
-                                    labelStyle: TextStyle(
-                                      fontSize: 16.0,
-                                      color: Colors.grey,
-                                    ),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                          color: Colors.grey, width: 1.0),
-                                      borderRadius: BorderRadius.circular(8.0),
-                                    ),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .primary,
-                                          width: 1.5),
-                                      borderRadius: BorderRadius.circular(8.0),
-                                    ),
-                                    contentPadding: EdgeInsets.symmetric(
-                                        vertical: 14.0, horizontal: 16.0),
-                                  ),
-                                ),
+                          child: Row(children: [
+                            Expanded(
+                                child: Container(
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
+                                    style: BorderStyle.solid),
+                                borderRadius: BorderRadius.circular(10.0),
                               ),
-                            ],
-                          ),
+                              child: Row(
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.all(16.0),
+                                    child: Text(output),
+                                  ),
+                                ],
+                              ),
+                            ))
+                          ]),
                         ),
-                        ElevatedButton(
-                          onPressed: () {
-                            print(decimalcontroller.text);
-                            print(binarycontroller.text);
-                            state.decimal = decimalcontroller.text;
-                            state.binary = binarycontroller.text;
-                            if (state.decimal != "") {
-                              context
-                                  .read<ConverterBloc>()
-                                  .add(DecimalToBinaryEvent());
-                            } else if (state.binary != "") {
-                              context
-                                  .read<ConverterBloc>()
-                                  .add(BinaryToDecimalEvent());
-                            }
-                          },
-                          child: Text("Convert"),
+                        Row(
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.all(16.0),
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  context
+                                      .read<ConverterBloc>()
+                                      .add(ConvertEvent(inputcontroller.text));
+                                },
+                                child: Text("Convert"),
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.all(16.0),
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  context
+                                      .read<ConverterBloc>()
+                                      .add(ResetConversionEvent());
+                                },
+                                child: Text("Reset"),
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.all(16.0),
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  context
+                                      .read<ConverterBloc>()
+                                      .add(SwapConversionEvent());
+                                },
+                                child: Text("Swap"),
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
