@@ -1,9 +1,13 @@
+import 'package:counter_app/domain/repositories/conversion_repository.dart';
 import 'package:counter_app/presentation/converter/converter_screen.dart';
 import 'package:counter_app/presentation/counter/counter_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-void main() {
-  runApp(const MyApp());
+Future main() async {
+  await dotenv.load(fileName: '.env');
+  print(dotenv.env);
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -21,5 +25,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-
