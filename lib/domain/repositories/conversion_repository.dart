@@ -6,14 +6,14 @@ class ConversionRepository {
 
   Future<String> binaryToDecimal(String binary) async {
     print("in repository before call");
-    String decimal = await apiService.BinaryToDecimal(binary);
+    String decimal = await apiService.binaryToDecimal(binary);
     print("in repository after call");
     return decimal;
   }
 
   Future<String> decimalToBinary(String decimal) async {
     print("in repository before call");
-    String binary = await apiService.DecimalToBinary(decimal);
+    String binary = await apiService.decimalToBinary(decimal);
     print("in repository after call");
     return binary;
   }

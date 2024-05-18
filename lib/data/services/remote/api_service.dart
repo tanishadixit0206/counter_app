@@ -9,7 +9,7 @@ dynamic url_btd = dotenv.env['url_btd'];
 
 class ApiService {
   
-  Future<String> BinaryToDecimal(String binary) async {
+  Future<String> binaryToDecimal(String binary) async {
     final dio = Dio();
     try {
       String data = jsonEncode({"num": binary});
@@ -32,7 +32,7 @@ class ApiService {
     }
   }
 
-  Future<String> DecimalToBinary(String decimal) async {
+  Future<String> decimalToBinary(String decimal) async {
     final dio = Dio();
     try {
       String data = jsonEncode({"num": decimal});
